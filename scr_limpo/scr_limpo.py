@@ -67,8 +67,3 @@ for arquivo in os.listdir(raw_path / 'prod'):
 with pd.ExcelWriter(processed_path / 'prod/scr_prod.xlsx') as writer:
     for nome, frames in dfs.items():
         pd.concat(frames, ignore_index=True).to_excel(writer, sheet_name=nome, index=False)
-
-
-##################### PROCESSAMENTO DAS PLANILHAS ESPECIAIS #####################
-processor = Processor_espec(raw_path / 'espec/tab01.xls')
-df = processor.process_espec()
