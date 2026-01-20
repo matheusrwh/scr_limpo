@@ -15,7 +15,7 @@ class Processor_scr:
     - valores_reais: valores reais do VAB
     Por hora, apenas o VAB é processado, mas a caso haja necessidade é relativamente fácil adaptar o script para processar também os dados do VBP e do CI.
     '''
-    def __init__(self, path_file, aba, year_slice=slice(59, 80), region_row=56, setor_row=57):
+    def __init__(self, path_file, aba, year_slice=slice(61, 83), region_row=58, setor_row=59):
         self.path_file = path_file
         self.aba = aba
         self.year_slice = year_slice
@@ -29,7 +29,7 @@ class Processor_scr:
         corrente = df.iloc[self.year_slice, 5]*1000000 # NOTAR QUE O SCRIPT JÁ APLICA O FATOR DE CONVERSÃO PARA MILHÕES DE REAIS
         region = df.iloc[self.region_row, 0]
         setor = df.iloc[self.setor_row, 0]
-
+        
         acumulado = price.copy()
         acumulado.iloc[0] = 1
         for i in range(1, len(acumulado)):
@@ -37,7 +37,7 @@ class Processor_scr:
 
         deflator = acumulado/acumulado.iloc[-1]
         reais = corrente/deflator
-
+        
         return pd.DataFrame({
             'ano': year,
             'regiao': region,

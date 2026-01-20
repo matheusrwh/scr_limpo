@@ -15,8 +15,8 @@ from scr_limpo.services.processor_scr import Processor_scr
 from scr_limpo.services.downloader import Downloader
 from scr_limpo.services.processor_espec import Processor_espec
 
-URL_PROD = 'https://ftp.ibge.gov.br/Contas_Regionais/2022/xls/Conta_da_Producao_2002_2022_xls.zip'
-URL_ESPEC = 'https://ftp.ibge.gov.br/Contas_Regionais/2022/xls/Especiais_2002_2022_xls.zip'
+URL_PROD = 'https://ftp.ibge.gov.br/Contas_Regionais/2023/xls/Conta_da_Producao_2002_2023_xls.zip'
+URL_ESPEC = 'https://ftp.ibge.gov.br/Contas_Regionais/2023/xls/Especiais_2002_2023_xls.zip'
 downloader_prod = Downloader(URL_PROD, raw_path / 'prod')
 downloader_prod.run()
 download_espec = Downloader(URL_ESPEC, raw_path / 'espec')
@@ -60,6 +60,11 @@ for arquivo in os.listdir(raw_path / 'prod'):
         num = re.search(r'Tabela(\d+)', arquivo)
         if num:
             num_tabela = num.group(1)
+
+            # Bypass da Tabela19 (mudou de formato e quebra o processamento)
+            if num_tabela == '19':
+                continue
+
             path_file = os.path.join(raw_path / 'prod', arquivo)
             for nome, sufixo in abas.items():
                 processor = Processor_scr(path_file, f'Tabela{num_tabela}{sufixo}')
